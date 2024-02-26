@@ -14,3 +14,8 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+Use flutter web command:
+flutter config --enable-web
+Show Flutter Images for web command:
+flutter build web --web-renderer html --release
+
