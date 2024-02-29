@@ -5,13 +5,15 @@ class UserPost {
   final String postedAt;
   final String size;
   final String number;
+  final String mainDocId;
   final String available;
   final String type;
   final String price;
   final bool sold;
 
-  UserPost({
+  UserPost( {
     required this.name,
+    required this.mainDocId,
     required this.phoneno,
     required this.subCategories,
     required this.postedAt,
@@ -34,6 +36,7 @@ class UserPost {
       available: json['Available'] ?? '',
       type: json['Type'] ?? '',
       price: json['Price'] ?? '',
+      mainDocId: json['mainDocId'] ?? '',
       sold: json['sold'] ?? false,
     );
   }

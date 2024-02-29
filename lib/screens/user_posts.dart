@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pakistan_solar_market/screens/update_user_post_screen.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 import '../pdf_services.dart';
@@ -18,7 +19,9 @@ class UserPostsList extends StatefulWidget {
 
 class _UserPostsListState extends State<UserPostsList> {
   List<UserPost> userPosts = [];
+  String? postID;
 
+  String? mainDocId;
   late Future<List<UserPost>> userPostsFuture;
   TextEditingController searchController = TextEditingController();
 
@@ -32,7 +35,7 @@ class _UserPostsListState extends State<UserPostsList> {
     QuerySnapshot postsSnapshot = await postsCollection.get();
 
     for (QueryDocumentSnapshot postDoc in postsSnapshot.docs) {
-      String postID = postDoc.id;
+       postID = postDoc.id;
 
       CollectionReference userPanelPostsCollection =
           postsCollection.doc(postID).collection('userPanelPosts');
@@ -40,10 +43,15 @@ class _UserPostsListState extends State<UserPostsList> {
       QuerySnapshot userPanelPostsSnapshot =
           await userPanelPostsCollection.get();
 
+
       userPanelPostsSnapshot.docs.forEach((userPostDoc) {
         Map<String, dynamic> postDetails =
             userPostDoc.data() as Map<String, dynamic>;
+
+        mainDocId = postDetails['mainDocId'];
+
         UserPost userPost = UserPost.fromJson(postDetails);
+
         userPosts.add(userPost);
       });
     }
@@ -250,6 +258,17 @@ class _UserPostsListState extends State<UserPostsList> {
                                       ),
                                     ),
                                   ),
+                                  DataColumn(
+                                    label: SizedBox(
+                                      width: 50,
+                                      child: Text(
+                                        'Actions',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                                 rows: filteredPosts
                                     .map<DataRow>((UserPost postData) {
@@ -279,6 +298,24 @@ class _UserPostsListState extends State<UserPostsList> {
                                       DataCell(Text(postData.type)),
                                       DataCell(Text(postData.price)),
                                       DataCell(Text(postData.sold.toString())),
+                                      DataCell(InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => UpdateUserPostScreen(postData: postData),
+                                            ),
+                                          );
+
+                                        },
+                                        child: Text(
+                                          "Edit",
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )),
                                     ],
                                   );
                                 }).toList(),

@@ -64,9 +64,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-       home: isLoggedIn ? DashboardScreen() : LoginScreen(),
+    //   home: isLoggedIn ? DashboardScreen() : LoginScreen(),
 
-     // home: UserPostsList(),
+      home: UserPostsList(),
 
     );
   }
