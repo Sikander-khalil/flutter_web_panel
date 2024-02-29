@@ -305,6 +305,7 @@ class _UpdateUserPostScreenState extends State<UpdateUserPostScreen> {
   }
 
   void updateDataInFirestore() {
+    bool isSold = soldController.text.toLowerCase() == 'true';
 
     FirebaseFirestore.instance
         .collection('posts')
@@ -320,7 +321,7 @@ class _UpdateUserPostScreenState extends State<UpdateUserPostScreen> {
       'Available': availableController.text,
       'Type': typeController.text,
       'Price': priceController.text,
-      'sold': soldController.text,
+      'sold': isSold,
 
 
 
