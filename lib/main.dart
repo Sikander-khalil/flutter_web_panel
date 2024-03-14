@@ -2,27 +2,14 @@ import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 
-import 'dart:typed_data';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
-
-import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/material.dart';
+import 'package:pakistan_solar_market/screens/company_verifications.dart';
 
-import 'package:image_picker_web/image_picker_web.dart';
+
 import 'package:pakistan_solar_market/screens/dasboard_screen.dart';
 import 'package:pakistan_solar_market/screens/login_screens.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:pakistan_solar_market/screens/add_china_rate.dart';
-import 'package:pakistan_solar_market/screens/add_news.dart';
-import 'package:pakistan_solar_market/screens/china_screen.dart';
-import 'package:pakistan_solar_market/screens/company_verifications.dart';
-import 'package:pakistan_solar_market/screens/myDrawer.dart';
-import 'package:pakistan_solar_market/screens/update_news.dart';
-import 'package:pakistan_solar_market/screens/user_posts.dart';
 
 const showSnackBar = false;
 const expandChildrenOnReady = true;
@@ -64,16 +51,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-     home: isLoggedIn ? DashboardScreen() : LoginScreen(),
-
+      home: isLoggedIn ? DashboardScreen() : LoginScreen(),
 
 
     );
   }
 }
-
-
-
-
-
-

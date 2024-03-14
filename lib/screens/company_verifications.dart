@@ -85,7 +85,7 @@ class _CompanyVerificationsState extends State<CompanyVerifications> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          left: 50, right: 50),
+                                          left: 150, right: 150),
                                       child: Card(
                                         color: Color(0xff034d17),
                                         elevation: 5,
@@ -93,12 +93,12 @@ class _CompanyVerificationsState extends State<CompanyVerifications> {
                                           children: [
                                             Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 20, right: 20, top: 20),
+                                                  left: 10, right: 10, top: 20),
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                 children: [
                                                   Text(
-                                                    "Phone Number: ${phoneNumber}",
+                                                    "Phone: ${phoneNumber}",
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontWeight:
@@ -124,7 +124,7 @@ class _CompanyVerificationsState extends State<CompanyVerifications> {
                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 Text(
-                                                  "Account Number: ${companyData['account_number']}",
+                                                  "Account# ${companyData['account_number']}",
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight: FontWeight.bold,

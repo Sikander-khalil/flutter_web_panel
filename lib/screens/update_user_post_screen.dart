@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pakistan_solar_market/screens/user_posts.dart';
 import 'package:pakistan_solar_market/user_post_model.dart';
-
+import 'package:ndialog/ndialog.dart';
 import 'myDrawer.dart';
 
 class UpdateUserPostScreen extends StatefulWidget {
@@ -306,7 +307,6 @@ class _UpdateUserPostScreenState extends State<UpdateUserPostScreen> {
 
   void updateDataInFirestore() {
     bool isSold = soldController.text.toLowerCase() == 'true';
-
     FirebaseFirestore.instance
         .collection('posts')
         .doc(widget.postData.phoneno)
@@ -327,6 +327,25 @@ class _UpdateUserPostScreenState extends State<UpdateUserPostScreen> {
 
 
     }).then((_) {
+      ProgressDialog progressDialog = ProgressDialog(
+        context,
+        title: const Text(
+          'Updating Posts',
+          style: TextStyle(color: Colors.black),
+        ),
+        message: const Text(
+          'Please wait',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+      );
+      progressDialog.show();
+
+      Future.delayed(Duration(seconds: 2), (){
+        progressDialog.dismiss();
+        Navigator.push(context, MaterialPageRoute(builder: (context) => UserPostsList()));
+      });
+
       var snackBar = SnackBar(content: Text('Update Posts'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 

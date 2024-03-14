@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pakistan_solar_market/screens/add_admin_post.dart';
 import 'package:pakistan_solar_market/screens/add_china_rate.dart';
 
 import 'package:pakistan_solar_market/screens/china_screen.dart';
@@ -90,7 +91,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 child: Text("Users")),
           ),
           NavigationRailDestination(
-            icon: Icon(Icons.currency_bitcoin_outlined),
+            icon: Icon(Icons.price_check),
             label: Container(
               width: 150,
               child: PopupSubMenuItem<String>(
@@ -110,20 +111,22 @@ class _MyDrawerState extends State<MyDrawer> {
             ),
           ),
           NavigationRailDestination(
-            icon: InkWell(
-                onTap: () {
+            icon: Icon(Icons.post_add),
+            label: Container(
+              width: 150,
+              child: PopupSubMenuItem<String>(
+                title: 'User Posts',
+                items: ['Add Post', 'Show Posts'],
+                onSelected: (value) {
                   updateIndex(4);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => UserPostsList()));
+                  if (value == 'Add Post') {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AddAdminPostScreen()));
+                  } else if (value == 'Show Posts') {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => UserPostsList()));
+                  }
                 },
-                child: Icon(Icons.image)),
-            label: InkWell(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UserPostsList()));
-              },
-              child: Text(
-                "User Posts",
               ),
             ),
           ),

@@ -4,7 +4,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker_web/image_picker_web.dart';
-
+import 'package:ndialog/ndialog.dart';
+import 'package:pakistan_solar_market/screens/company_verifications.dart';
 import 'package:pakistan_solar_market/screens/myDrawer.dart';
 
 class UpdateCompanyProfileScreen extends StatefulWidget {
@@ -180,17 +181,38 @@ class _UpdateCompanyProfileScreenState
       'iban': ibanController.text,
       'verified': (_currentSelectedValue == "true"),
     };
+    ProgressDialog progressDialog = ProgressDialog(
+        context,
+        title: const Text(
+          'Updating Profile',
+          style: TextStyle(color: Colors.black),
+        ),
+      message: const Text(
+        'Please wait',
+        style: TextStyle(color: Colors.black),
+      ),
+      backgroundColor: Colors.white,
+    );
+
 
 
 
 
     try {
+      progressDialog.show();
       await profileCollections.doc(widget.phoneNumber).update(updateData);
       print('Profile Updated');
+
+      setState(() {
+
+      });
+      progressDialog.dismiss();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyVerifications()));
 
       var snackBar = SnackBar(content: Text('Profile Update'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } catch (error) {
+      progressDialog.dismiss();
       print('Error updating data: $error');
       // Handle error
     }

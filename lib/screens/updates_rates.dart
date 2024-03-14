@@ -1,6 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ndialog/ndialog.dart';
+import 'package:pakistan_solar_market/screens/china_screen.dart';
 import 'package:pakistan_solar_market/screens/myDrawer.dart';
 
 class UpdatesChinaRates extends StatefulWidget {
@@ -78,6 +80,27 @@ class _UpdatesChinaRatesState extends State<UpdatesChinaRates> {
       'Name': nameController.text,
       'Price': double.parse(priceController.text),
     }).then((value) {
+      ProgressDialog progressDialog = ProgressDialog(
+        context,
+        title: const Text(
+          'Updating Rates',
+          style: TextStyle(color: Colors.black),
+        ),
+        message: const Text(
+          'Please wait',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+      );
+      progressDialog.show();
+
+      Future.delayed(Duration(seconds: 2), (){
+
+        progressDialog.dismiss();
+
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ChinaRatesList()));
+      });
+
       var snackBar =
       SnackBar(content: Text('Updates Rates'));
       ScaffoldMessenger.of(context)

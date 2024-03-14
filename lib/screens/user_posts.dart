@@ -1,18 +1,14 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pakistan_solar_market/screens/update_user_post_screen.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 
+import 'package:pakistan_solar_market/screens/update_user_post_screen.dart';
 import '../pdf_services.dart';
 import '../user_post_model.dart';
 import 'myDrawer.dart';
 
 class UserPostsList extends StatefulWidget {
+  const UserPostsList({super.key});
+
   @override
   _UserPostsListState createState() => _UserPostsListState();
 }
@@ -20,51 +16,72 @@ class UserPostsList extends StatefulWidget {
 class _UserPostsListState extends State<UserPostsList> {
   List<UserPost> userPosts = [];
   String? postID;
-
   String? mainDocId;
   late Future<List<UserPost>> userPostsFuture;
+  late Future<List<UserPost>> userPostsFuture2;
   TextEditingController searchController = TextEditingController();
 
   Future<List<UserPost>> fetchData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    String currentUserId = user?.uid ?? '';
 
     CollectionReference postsCollection =
-        FirebaseFirestore.instance.collection('posts');
+    FirebaseFirestore.instance.collection('posts');
 
     QuerySnapshot postsSnapshot = await postsCollection.get();
 
     for (QueryDocumentSnapshot postDoc in postsSnapshot.docs) {
-       postID = postDoc.id;
+      postID = postDoc.id;
+
 
       CollectionReference userPanelPostsCollection =
-          postsCollection.doc(postID).collection('userPanelPosts');
+      postsCollection.doc(postID).collection('userPanelPosts');
 
       QuerySnapshot userPanelPostsSnapshot =
-          await userPanelPostsCollection.get();
+      await userPanelPostsCollection.get();
 
-
-      userPanelPostsSnapshot.docs.forEach((userPostDoc) {
+      for (var userPostDoc in userPanelPostsSnapshot.docs) {
         Map<String, dynamic> postDetails =
-            userPostDoc.data() as Map<String, dynamic>;
+        userPostDoc.data() as Map<String, dynamic>;
 
         mainDocId = postDetails['mainDocId'];
 
         UserPost userPost = UserPost.fromJson(postDetails);
 
         userPosts.add(userPost);
-      });
+      }
     }
 
     return userPosts;
   }
 
+  Future<List<UserPost>> displayPost() async {
+    CollectionReference postsCollection =
+    FirebaseFirestore.instance.collection('posts');
+
+    QuerySnapshot postsSnapshot = await postsCollection
+        .doc("+923114376818")
+        .collection("userPanelPosts")
+        .get();
+
+    for (var userPostDoc in postsSnapshot.docs) {
+      Map<String, dynamic> postDetails =
+      userPostDoc.data() as Map<String, dynamic>;
+
+      mainDocId ??= postDetails['mainDocId'];
+
+
+      UserPost userPost = UserPost.fromJson(postDetails);
+
+      userPosts.add(userPost);
+    }
+    return userPosts;
+  }
+
   List<UserPost> filterPosts(List<UserPost> posts, String query) {
     return posts.where((post) {
-      String phoneno = post.phoneno.toLowerCase() ?? '';
-      String available = post.available.toLowerCase() ?? '';
-      String subCategories = post.subCategories.toLowerCase() ?? '';
-      String name = post.name.toLowerCase() ?? '';
+      String phoneno = post.phoneno.toLowerCase();
+      String available = post.available.toLowerCase();
+      String subCategories = post.subCategories.toLowerCase();
+      String name = post.name.toLowerCase();
 
       return phoneno.contains(query.toLowerCase()) ||
           available.contains(query.toLowerCase()) ||
@@ -77,6 +94,7 @@ class _UserPostsListState extends State<UserPostsList> {
   void initState() {
     super.initState();
     userPostsFuture = fetchData();
+    userPostsFuture2 = displayPost();
   }
 
   @override
@@ -84,12 +102,12 @@ class _UserPostsListState extends State<UserPostsList> {
     return Scaffold(
       body: Row(
         children: [
-          MyDrawer(),
+          const MyDrawer(),
           Expanded(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 50, right: 50, top: 10),
+                const Padding(
+                  padding: EdgeInsets.only(left: 50, right: 50, top: 10),
                   child: Text(
                     "User Posts",
                     style: TextStyle(
@@ -98,19 +116,19 @@ class _UserPostsListState extends State<UserPostsList> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 500,
                       child: TextFormField(
                         controller: searchController,
                         decoration: InputDecoration(
                           hintText: 'Search Posts',
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           suffixIcon: IconButton(
-                            icon: Icon(Icons.clear),
+                            icon: const Icon(Icons.clear),
                             onPressed: () {
                               searchController.clear();
                               setState(() {});
@@ -124,22 +142,22 @@ class _UserPostsListState extends State<UserPostsList> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Expanded(
-                  child: FutureBuilder(
+                  child: FutureBuilder<List<UserPost>>(
                     future: userPostsFuture,
                     builder: (context, AsyncSnapshot<List<UserPost>> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(
+                        return const Center(
                           child: Text('No data found for the user.'),
                         );
                       } else {
                         List<UserPost> filteredPosts =
-                            filterPosts(snapshot.data!, searchController.text);
+                        filterPosts(snapshot.data!, searchController.text);
 
                         return Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -150,7 +168,7 @@ class _UserPostsListState extends State<UserPostsList> {
                               controller: ScrollController(),
                               child: DataTable(
                                 border: TableBorder.all(width: 0.75),
-                                columns: [
+                                columns: const [
                                   DataColumn(
                                     label: SizedBox(
                                       width: 50,
@@ -262,7 +280,7 @@ class _UserPostsListState extends State<UserPostsList> {
                                     label: SizedBox(
                                       width: 50,
                                       child: Text(
-                                        'Actions',
+                                        'Action',
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold),
@@ -303,12 +321,13 @@ class _UserPostsListState extends State<UserPostsList> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => UpdateUserPostScreen(postData: postData),
+                                              builder: (context) =>
+                                                  UpdateUserPostScreen(
+                                                      postData: postData),
                                             ),
                                           );
-
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           "Edit",
                                           style: TextStyle(
                                               color: Colors.red,

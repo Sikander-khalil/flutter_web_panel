@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ndialog/ndialog.dart';
+import 'package:pakistan_solar_market/screens/show_news.dart';
 
 import 'myDrawer.dart';
 
@@ -143,24 +144,29 @@ class _AddNewsState extends State<AddNews> {
                           String description = descController.text.trim();
 
                           String date = _dateController.text.trim();
+                          ProgressDialog progressDialog = ProgressDialog(
+                            context,
+                            title: const Text(
+                              'Adding News',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            message: const Text(
+                              'Please wait',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            backgroundColor: Colors.white,
+                          );
 
                           if (title.isNotEmpty &&
                               description.isNotEmpty &&
                               date.isNotEmpty) {
-                            ProgressDialog progressDialog = ProgressDialog(
-                              context,
-                              title: const Text(
-                                'Adding News',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              message: const Text(
-                                'Please wait',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              backgroundColor: Colors.white,
-                            );
+
                             try {
+
                               progressDialog.show();
+                              setState(() {
+
+                              });
 
                               String id = DateTime.now()
                                   .millisecondsSinceEpoch
@@ -179,6 +185,7 @@ class _AddNewsState extends State<AddNews> {
                               });
 
                               progressDialog.dismiss();
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => BlogScreen()));
 
                               var snackBar =
                                   SnackBar(content: Text('Adding News'));

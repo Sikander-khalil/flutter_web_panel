@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:pakistan_solar_market/screens/myDrawer.dart';
+import 'package:pakistan_solar_market/screens/show_news.dart';
 
 class UpdateNews extends StatefulWidget {
   final String title;
@@ -49,6 +51,26 @@ class _UpdateNewsState extends State<UpdateNews> {
           'newsDescription': descriptionController.text,
           'date': dateController.text,
         }).then((_) {
+          ProgressDialog progressDialog = ProgressDialog(
+            context,
+            title: const Text(
+              'Updating News',
+              style: TextStyle(color: Colors.black),
+            ),
+            message: const Text(
+              'Please wait',
+              style: TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Colors.white,
+          );
+          progressDialog.show();
+
+          Future.delayed(Duration(seconds: 2), (){
+
+            progressDialog.dismiss();
+            Navigator.push(context, MaterialPageRoute(builder: (context) => BlogScreen()));
+
+          });
           var snackBar = SnackBar(content: Text('Update News'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }).catchError((error) {
